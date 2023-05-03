@@ -1,2 +1,2 @@
-.sqlite
+backend/db/database.sqlite
 .env
