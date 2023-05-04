@@ -1,2 +1,5 @@
-backend/db/database.sqlite
+node_modules
 .env
+backend/db/database.sqlite
+
+
