@@ -8,10 +8,14 @@ User.init({
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    username: {
         type: DataTypes.TEXT,
         allowNull: false
-    }
+    },
+    password: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
 }, { sequelize: db })
 
 module.exports = User
