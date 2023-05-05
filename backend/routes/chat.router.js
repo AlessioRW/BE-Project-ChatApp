@@ -1,6 +1,7 @@
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 const chatRouter = require('express')()
 const { User, Message, Chat } = require('../db/models')
@@ -83,7 +84,23 @@ chatRouter.post('/:chatId', async (req, res) => {
 
 //get chat [nMessages] messages from chat [chatId] starting at message [sIndex]
 chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
+    try {
+        const { chatId, sIndex, nMessages } = req.params
+        const chat = await Chat.findByPk(chatId)
+        const messages = (await chat.getMessages()).reverse()
 
+        const returnMessages = []
+        for (let i = sIndex; (i - sIndex) < (nMessages); i++) {
+            if (messages[i]) {
+                returnMessages.push(messages[i])
+            }
+        }
+        res.status(200).send({ chat: chat, messages: returnMessages })
+
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
 })
 
 module.exports = chatRouter
