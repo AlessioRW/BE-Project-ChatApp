@@ -8,6 +8,10 @@ Chat.init({
         primaryKey: true,
         autoIncrement: true
     },
+    ownerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     name: {
         type: DataTypes.TEXT,
         allowNull: false
