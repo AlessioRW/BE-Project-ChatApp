@@ -11,7 +11,6 @@ chatRouter.use(async (req, res, next) => {
         const { token } = req.body
         if (token) {
             const { id } = jwt.decode(token, JWT_SECRET)
-            console.log(id)
             req.body.requesterId = id
             next()
         } else {
@@ -33,7 +32,7 @@ chatRouter.post('/new', async (req, res) => {
     //     }
     // })
 
-    const newChat = await Chat.build({
+    const newChat = await Chat.create({
         name: name,
         ownerId: requesterId
     })
@@ -47,6 +46,7 @@ chatRouter.post('/new', async (req, res) => {
             await newChat.addUser(user)
         } else {
             res.status(400).send({ message: `User ${username} does not exist` })
+            await newChat.destroy
             return
         }
     }
@@ -56,20 +56,32 @@ chatRouter.post('/new', async (req, res) => {
 
 })
 
+//send message to chat
 chatRouter.post('/:chatId', async (req, res) => {
     try {
-        const { msg, token } = req.body
+        const { message, requesterId } = req.body
+        const { chatId } = req.params
 
-        const user = jwt.verify(token, JWT_SECRET)
-        if (user) {
-            console.log(user)
+        const chat = await Chat.findByPk(chatId)
+        if (chat) {
+            const sender = await User.findByPk(requesterId)
+            const newMessage = await Message.create({
+                content: message,
+                chat_id: chat.id,
+                user_id: sender.id,
+            })
+            res.sendStatus(200)
+        } else {
+            res.status(404).send({ message: "Chat does not exist" })
         }
 
     } catch (error) {
-
+        console.log(error)
+        res.sendStatus(500)
     }
 })
 
+//get chat [nMessages] messages from chat [chatId] starting at message [sIndex]
 chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
 
 })

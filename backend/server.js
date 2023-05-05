@@ -12,5 +12,5 @@ app.use('/user', userRouter)
 app.use('/chat', chatRouter)
 
 app.listen(port, async () => {
-    console.log(`Server Running on  localhost:${3000}`)
+    console.log(`Server Running on  localhost:${port}`)
 })
