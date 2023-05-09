@@ -10,7 +10,7 @@
     "sqlite3": "^5.1.6"
   },
   "scripts": {
-    "backend-dev": "npx nodemon backend/server.js",
-    "seed": "node backend/db/seed.js"
+    "dev": "npx nodemon server.js",
+    "seed": "node db/seed.js"
   }
 }
