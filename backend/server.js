@@ -5,7 +5,7 @@ const { Chat, User, Message } = require('./db/models')
 
 const userRouter = require('./routes/user.router')
 const chatRouter = require('./routes/chat.router')
-const port = 3000
+const port = 8000
 
 app.use(express.json());
 app.use('/user', userRouter)
