@@ -1,5 +1,5 @@
 node_modules
 .env
 backend/db/database.sqlite
-.pyc
+*.pyc
 
