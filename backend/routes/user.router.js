@@ -75,5 +75,27 @@ userRouter.post('/login', async (req,res) => {
 })
 
 
+userRouter.get('/chats', async (req,res) => {
+    try {
+        const {token} = req.body
+        if (token){
+            const user = jwt.decode(token, JWT_SECRET)
+            if (user){
+                const userObj = await User.findByPk(user.id)
+                const chats = await userObj.getChats()
+                res.status(200).send({chats: chats})
+            } else {
+                res.status(400).send({message: "Invlaid Token"})
+            }
+        } else {
+            res.status(400).send({message: "Invlaid Token"})
+        }
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
+
 
 module.exports = userRouter

@@ -23,7 +23,8 @@ chatRouter.use(async (req, res, next) => {
 })
 
 chatRouter.post('/new', async (req, res) => {
-    const { users, name, requesterId } = req.body
+    const { members, name, requesterId } = req.body
+    //requesterId is passed from the use above, not needed in body!
 
     // await Chat.findOne({
     //     where: {name: name}
@@ -38,7 +39,7 @@ chatRouter.post('/new', async (req, res) => {
         ownerId: requesterId
     })
 
-    for (let username of users) {
+    for (let username of members) {
         const user = await User.findOne({
             where:
                 { username: username }
