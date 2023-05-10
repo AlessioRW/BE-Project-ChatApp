@@ -93,10 +93,12 @@ chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
         const returnMessages = []
         for (let i = sIndex; (i - sIndex) < (nMessages); i++) {
             if (messages[i]) {
+                const user = await messages[i].getUser()
+                messages[i].dataValues.user = user.username //i'm silly
                 returnMessages.push(messages[i])
             }
         }
-        res.status(200).send({ chat: chat, messages: returnMessages })
+        res.status(200).send({ chat: chat, messages: returnMessages.reverse() })
 
     } catch (error) {
         console.log(error)

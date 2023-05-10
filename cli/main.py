@@ -1,6 +1,8 @@
 from utils.fetchConfig import fetchConfig
-import requests, os, json, time
+import requests, os, json, time, subprocess
 host = fetchConfig()['host']
+
+
 
 
 def main(token, username):
@@ -36,10 +38,21 @@ def main(token, username):
                 print
             else:
                 chat = chats[chatNum-1]
-    return
+                useChat(chat,username)
+
+def useChat(chat, username):
+    subprocess.call('start py listen.py {token} {chatId}'.format(token=token, chatId=chat['id']), shell=True)
+    while True:
+        os.system('cls')
+        print('Chat - {}'.format(chat['name']))
+        message = input('{}> '.format(username))
+        res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'token': token, 'message': message})
 
 
 def login():
+    global token
+    global username
+
     token = ''
     username = ''
     if token == '': #logged in
