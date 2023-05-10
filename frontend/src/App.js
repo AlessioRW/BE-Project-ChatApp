@@ -1,16 +1,25 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
+import { createContext, useState } from 'react';
+import { Logout } from './pages/Logout';
+export const userContext = createContext()
 
 function App() {
+  const [token, setToken] = useState()
+  const [username, setUsername] = useState()
+
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route exact path='/' element={<Home/>}/>
-          <Route exact path='/login' element={<Login/>}/>
-        </Routes>
-      </BrowserRouter>
+      <userContext.Provider value={{token, setToken, username, setUsername}}>
+        <BrowserRouter>
+          <Routes>
+            <Route exact path='/' element={<Home/>}/>
+            <Route exact path='/login' element={<Login/>}/>
+            <Route exact path='/logout' element={<Logout/>}/>
+          </Routes>
+        </BrowserRouter>
+      </userContext.Provider>
     </div>
   );
 }
