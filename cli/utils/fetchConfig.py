@@ -1,8 +1,8 @@
 
 def fetchConfig():
-    
+
     fetchConfig = {
-        'host': 'localhost:8000'
+        'host': 'http://localhost:8000'
     }
 
     return fetchConfig
