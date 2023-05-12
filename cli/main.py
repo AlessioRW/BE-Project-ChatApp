@@ -2,14 +2,20 @@ from utils.fetchConfig import fetchConfig
 import requests, os, json, time, subprocess
 host = fetchConfig()['host']
 
+def changeState(state):
+    file = open('./state.txt', 'w')
+    file.write(str(state))
+    file.close()
 
 
+changeState(0)
 
 def main(token, username):
     os.system('cls')
-    print('Logged In as {}\n'.format(username))
+    
 
     while True:
+        print('Logged In as {}\n'.format(username))
         res = requests.get('{host}/user/chats'.format(host=host), json={'token': token})
         chats = json.loads(res.text)['chats']
         if len(chats) > 0:
@@ -35,18 +41,26 @@ def main(token, username):
                 print('Invalid Input')
                 time.sleep(1.5)
                 os.system('cls')
-                print
             else:
                 chat = chats[chatNum-1]
                 useChat(chat,username)
 
 def useChat(chat, username):
+    changeState(1)
     subprocess.call('start py listen.py {token} {chatId}'.format(token=token, chatId=chat['id']), shell=True)
     while True:
         os.system('cls')
         print('Chat - {}'.format(chat['name']))
+        print('Empty Message To Leave')
         message = input('{}> '.format(username))
+
+        if message == '':
+            os.system('cls')
+            break
+
         res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'token': token, 'message': message})
+
+    changeState(0)
 
 
 def login():

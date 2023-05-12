@@ -1,4 +1,5 @@
-import time, os, requests, json, sys
+import os, requests, json, sys
+import time as tm
 
 from utils.fetchConfig import fetchConfig
 host = fetchConfig()['host']
@@ -9,14 +10,20 @@ sIndex = 0
 
 def mainListen(chatId, token):
     while True:
-        time.sleep(1)
+        tm.sleep(1)
         os.system('cls')
+
+        if open('./state.txt','r').read() == '0':
+            break
+
         res = requests.get('{host}/chat/{chatId}/{sIndex}/{nMessages}'.format(host=host, chatId=chatId, sIndex=sIndex, nMessages=nMessages), json={'token':token})
         messages = json.loads(res.text)['messages']
         
         for message in messages:
-            print('{username}{time}> {message}'.format(username=message['user'], time='', message=message['content']))
-
+            [date, time, empty] = message['updatedAt'].replace('Z','T').split('T')
+            time = time.split('.')[0]
+            date = '/'.join(date.split('-')[::-1])
+            print('{time} {username}> {message}'.format(username=message['user'], time=date+' '+time, message=message['content']))
 
 token = sys.argv[1]
 chatId = int(sys.argv[2])
