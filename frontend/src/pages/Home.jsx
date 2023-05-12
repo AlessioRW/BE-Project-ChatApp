@@ -8,7 +8,7 @@ export function Home(){
     const nav = useNavigate()
 
     const {token, setToken, username, setUsername} = useContext(userContext)
-    const { user, isAuthenticated, isLoading } = useAuth0();
+    const { user, isAuthenticated, isLoading  } = useAuth0();
 
     useEffect(() => {
         if (user){
