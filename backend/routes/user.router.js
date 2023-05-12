@@ -22,7 +22,7 @@ userRouter.get('/all', async (req,res) => {
 
 userRouter.post('/auth0', async (req,res) => {
     try {
-        const {sub, nickname} = req.body
+        const {sub, username} = req.body
         
         let user = await User.findOne({
             where: {
@@ -36,7 +36,7 @@ userRouter.post('/auth0', async (req,res) => {
 
         } else {
             newUser = await User.create({
-                username: nickname,
+                username: username,
                 sub: sub
             })
             const token = jwt.sign({username: user.username, id:newUser.id}, JWT_SECRET)

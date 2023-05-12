@@ -12,9 +12,7 @@ export function Home(){
 
     useEffect(() => {
         if (user){
-            console.log(user)
             axiosInstance.post('/user/auth0', {sub: user.sub, username: user.nickname}).then((res) => {setToken(res.data.token); setUsername(res.data.name)})
-            console.log(token)
         }
     }, [isAuthenticated])
 
