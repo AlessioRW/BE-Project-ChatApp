@@ -7,13 +7,9 @@ def changeState(state):
     file.write(str(state))
     file.close()
 
-
-changeState(0)
-
 def main(token, username):
     os.system('cls')
     
-
     while True:
         print('Logged In as {}\n'.format(username))
         res = requests.get('{host}/user/chats'.format(host=host), json={'token': token})
@@ -108,4 +104,5 @@ def login():
                     print(obj['message'])
         main(token=token, username=username)
 
+changeState(0)
 login()
