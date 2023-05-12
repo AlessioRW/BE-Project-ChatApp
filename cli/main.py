@@ -2,6 +2,7 @@ from utils.fetchConfig import fetchConfig
 import requests, os, json, time, subprocess
 host = fetchConfig()['host']
 
+#watch if chat is open
 def changeState(state):
     file = open('./state.txt', 'w')
     file.write(str(state))
