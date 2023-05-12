@@ -14,8 +14,13 @@ User.init({
     },
     password: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
     },
+    sub:
+    {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
 }, { sequelize: db })
 
 module.exports = User

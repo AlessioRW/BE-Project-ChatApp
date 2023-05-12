@@ -1,8 +1,10 @@
-import {useContext, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import { fetchConfig } from '../utils/config'
 import { axiosInstance } from '../utils/axiosInstance'
 import { useNavigate } from 'react-router'
 import { userContext } from '../App'
+import { useAuth0 } from "@auth0/auth0-react";
+
 const {host} = fetchConfig()
 
 export function Login(){
@@ -12,6 +14,7 @@ export function Login(){
     const nav = useNavigate()
 
     const {setToken, setUsername} = useContext(userContext)
+    const { loginWithRedirect } = useAuth0();
 
     return ( 
         <section className="page-login">
@@ -65,8 +68,11 @@ export function Login(){
                 >
                 Login
             </h2>
-
             }
+
+            <h2 onClick={() => loginWithRedirect()}>
+                Login with auth0
+            </h2>
             
         </section>
     )
