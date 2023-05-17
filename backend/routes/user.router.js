@@ -108,9 +108,10 @@ userRouter.post('/login', async (req,res) => {
 })
 
 
-userRouter.get('/chats', async (req,res) => {
+userRouter.post('/chats', async (req,res) => {
     try {
         const {token} = req.body
+        console.log(req.body)
         if (token){
             const user = jwt.decode(token, JWT_SECRET)
             if (user){

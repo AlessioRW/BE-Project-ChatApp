@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { createContext, useState } from 'react';
 import { Logout } from './pages/Logout';
+import { Chat } from './pages/Chat';
 export const userContext = createContext()
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route exact path='/' element={<Home/>}/>
             <Route exact path='/login' element={<Login/>}/>
             <Route exact path='/logout' element={<Logout/>}/>
+            <Route exact path='/chat/:chatId' element={<Chat/>}/>
           </Routes>
         </BrowserRouter>
       </userContext.Provider>

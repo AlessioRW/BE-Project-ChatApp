@@ -106,6 +106,18 @@ chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
     }
 })
 
+chatRouter.get('/:chatId', async (req, res) => {
+    try {
+        const { chatId } = req.params
+        const chat = await Chat.findByPk(chatId)
+        res.status(200).send(chat)
+
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
 chatRouter.delete('/:messageId', async (req,res) => {
     try {
         const {requesterId} = req.body
