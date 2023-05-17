@@ -1,11 +1,20 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { userContext } from "../App"
+import { useAuth0 } from "@auth0/auth0-react";
+import { axiosInstance } from '../utils/axiosInstance'
 
 export function Home(){
     const nav = useNavigate()
 
-    const {token, username} = useContext(userContext)
+    const {token, setToken, username, setUsername} = useContext(userContext)
+    const { user, isAuthenticated, isLoading  } = useAuth0();
+
+    useEffect(() => {
+        if (user){
+            axiosInstance.post('/user/auth0', {sub: user.sub, username: user.nickname}).then((res) => {setToken(res.data.token); setUsername(res.data.name)})
+        }
+    }, [isAuthenticated])
 
     return (
         <section className="page-home">
