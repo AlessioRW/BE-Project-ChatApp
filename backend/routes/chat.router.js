@@ -106,4 +106,29 @@ chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
     }
 })
 
+chatRouter.delete('/:messageId', async (req,res) => {
+    try {
+        const {requesterId} = req.body
+        const {messageId} = req.params
+
+        const msg = await Message.findByPk(messageId)
+        if (!msg){
+            res.status(404).send({message: 'Message does not exist'})
+            return
+        }
+
+        const chat = await msg.getChat()
+        if (chat.ownerId === requesterId){
+            await msg.destroy()
+            res.sendStatus(200)
+        } else {
+            res.sendStatus(403).send({messsage: 'Invalid Permissions'})
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
 module.exports = chatRouter
