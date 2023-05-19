@@ -55,7 +55,7 @@ def useChat(chat, username):
             os.system('cls')
             break
 
-        res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'token': token, 'message': message})
+        res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'message': message}, headers={'Authorization': token})
 
     changeState(0)
 
