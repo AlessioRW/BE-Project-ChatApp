@@ -6,14 +6,22 @@ import { userContext } from "../App"
 export function Chat(){
     const [chatDetails, setDetails] = useState({})
     const [messages, setMessages] = useState([])
+    const [message, setMessage] = useState()
     const {token} = useContext(userContext)
+    const chatId = window.location.pathname.split('/').reverse()[0]
     useEffect(() => {
-        const chatId = window.location.pathname.split('/').reverse()[0]
         axiosInstance.get(`/chat/${chatId}`,  {headers: { Authorization:token}})
             .then((res) => {setDetails(res.data)})
-        axiosInstance.get(`/chat/${chatId}/${0}/${50}`, {headers: { Authorization:token}})
-            .then((res) => {setMessages(res.data.messages)})
     }, [])
+
+    useEffect(() => {
+        if (chatDetails !== {}){
+            setInterval(() => {
+                axiosInstance.get(`/chat/${chatId}/${0}/${50}`, {headers: { Authorization:token}})
+                .then((res) => {setMessages(res.data.messages)})
+            }, 500)
+        }
+    }, [chatDetails])
 
     return (
         <section className="page-chat">
@@ -33,6 +41,11 @@ export function Chat(){
                     })}
                 </section>
                 }
+                <label htmlFor="">Message: </label>
+                <input type="text" onChange={(e) => {setMessage(e.target.value)}}/>
+                <button onClick={() => {
+                    axiosInstance.post(`/chat/${chatId}`, {message: message}, {headers: { Authorization:token}})
+                }}>Send</button>
             </section>
             }
         </section>
