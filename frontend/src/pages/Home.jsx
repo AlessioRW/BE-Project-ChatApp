@@ -17,6 +17,7 @@ export function Home(){
     }, [isAuthenticated])
 
     useEffect(() => {
+        console.log(token)
         if (token){
             axiosInstance.post('/user/chats', {token: token}).then((res) => {setChats(res.data.chats)})
         }

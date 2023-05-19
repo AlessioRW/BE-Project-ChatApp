@@ -9,7 +9,7 @@ let { JWT_SECRET } = process.env
 
 chatRouter.use(async (req, res, next) => {
     try {
-        const { token } = req.body
+        const token = req.headers.authorization
         if (token) {
             const { id } = jwt.decode(token, JWT_SECRET)
             req.body.requesterId = id
@@ -106,6 +106,7 @@ chatRouter.get('/:chatId/:sIndex/:nMessages', async (req, res) => {
     }
 })
 
+//get chat info
 chatRouter.get('/:chatId', async (req, res) => {
     try {
         const { chatId } = req.params
