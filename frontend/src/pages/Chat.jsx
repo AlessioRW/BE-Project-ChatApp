@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import { axiosInstance } from "../utils/axiosInstance"
 import { useContext } from "react"
 import { userContext } from "../App"
+import { useNavigate } from "react-router"
 
 export function Chat(){
     const [chatDetails, setDetails] = useState({})
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState()
     const {token} = useContext(userContext)
+    const nav = useNavigate()
     const chatId = window.location.pathname.split('/').reverse()[0]
     useEffect(() => {
         axiosInstance.get(`/chat/${chatId}`,  {headers: { Authorization:token}})
@@ -48,6 +50,7 @@ export function Chat(){
                 }}>Send</button>
             </section>
             }
+            <button onClick={() => {nav('/')}}>Home</button>
         </section>
     )
 }
