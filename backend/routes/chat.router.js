@@ -9,7 +9,10 @@ let { JWT_SECRET } = process.env
 
 chatRouter.use(async (req, res, next) => {
     try {
-        const token = req.headers.authorization
+        let token = req.headers.authorization
+        if (!token){
+            token = req.body.headers.Authorization
+        }
         if (token) {
             const { id } = jwt.decode(token, JWT_SECRET)
             req.body.requesterId = id
@@ -23,38 +26,35 @@ chatRouter.use(async (req, res, next) => {
 })
 
 chatRouter.post('/new', async (req, res) => {
-    const { members, name, requesterId } = req.body
-    //requesterId is passed from the use above, not needed in body!
-
-    // await Chat.findOne({
-    //     where: {name: name}
-    // }).then((chat) => {
-    //     if (chat > 0){
-    //         res.status(400).send({message: "Chat with that name already exists"})
-    //     }
-    // })
-
-    const newChat = await Chat.create({
-        name: name,
-        ownerId: requesterId
-    })
-
-    for (let username of members) {
-        const user = await User.findOne({
-            where:
-                { username: username }
+    try {
+        console.log(2)
+        const { members, name, requesterId } = req.body
+        const newChat = await Chat.create({
+            name: name,
+            ownerId: requesterId
         })
-        if (user) {
-            await newChat.addUser(user)
-        } else {
-            res.status(400).send({ message: `User ${username} does not exist` })
-            await newChat.destroy
-            return
+    
+        for (let username of members) {
+            const user = await User.findOne({
+                where:
+                    { username: username }
+            })
+            if (user) {
+                await newChat.addUser(user)
+            } else {
+                res.status(400).send({ message: `User ${username} does not exist` })
+                await newChat.destroy()
+                return
+            }
         }
+    
+        await newChat.save()
+        res.status(200).send({ message: 'Chat has been created' })
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
     }
-
-    await newChat.save()
-    res.status(200).send({ message: 'Chat has been created' })
+   
 
 })
 

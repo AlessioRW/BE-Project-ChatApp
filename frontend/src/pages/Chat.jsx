@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { axiosInstance } from "../utils/axiosInstance"
 import { useContext } from "react"
 import { userContext } from "../App"
@@ -8,7 +8,8 @@ export function Chat(){
     const [chatDetails, setDetails] = useState({})
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState()
-    const {token} = useContext(userContext)
+    const {token, setOpenChat, openChat} = useContext(userContext)
+    const intervalRef = useRef()
     const nav = useNavigate()
     const chatId = window.location.pathname.split('/').reverse()[0]
     useEffect(() => {
@@ -17,11 +18,13 @@ export function Chat(){
     }, [])
 
     useEffect(() => {
-        if (chatDetails !== {}){
-            setInterval(() => {
+        if (chatDetails.id && !intervalRef.id){
+            setOpenChat(true)
+            intervalRef.id = setInterval(() => {                
                 axiosInstance.get(`/chat/${chatId}/${0}/${50}`, {headers: { Authorization:token}})
                 .then((res) => {setMessages(res.data.messages)})
             }, 500)
+            console.log(intervalRef.id)
         }
     }, [chatDetails])
 
@@ -34,7 +37,6 @@ export function Chat(){
                 {messages !== [] && 
                 <section className="messages">
                     {messages.map((message) => {
-                        console.log(message)
                         return (
                             <section className="message">
                                 <h3>{message.user}: {message.content}</h3>
@@ -50,7 +52,7 @@ export function Chat(){
                 }}>Send</button>
             </section>
             }
-            <button onClick={() => {nav('/')}}>Home</button>
+            <button onClick={() => {console.log(intervalRef.id);clearInterval(intervalRef.id);nav('/')}}>Home</button>
         </section>
     )
 }

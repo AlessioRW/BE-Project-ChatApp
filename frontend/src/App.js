@@ -9,10 +9,11 @@ export const userContext = createContext()
 function App() {
   const [token, setToken] = useState()
   const [username, setUsername] = useState()
+  const [openChat, setOpenChat] = useState(false)
 
   return (
     <div className="App">
-      <userContext.Provider value={{token, setToken, username, setUsername}}>
+      <userContext.Provider value={{token, setToken, username, setUsername, openChat, setOpenChat}}>
         <BrowserRouter>
           <Routes>
             <Route exact path='/' element={<Home/>}/>
