@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 import { userContext } from "../App"
 import { useAuth0 } from "@auth0/auth0-react";
 import { axiosInstance } from '../utils/axiosInstance'
+import { ErrorText } from "../components/ErrorText";
 
 export function Home(){
     const nav = useNavigate()
@@ -12,6 +13,7 @@ export function Home(){
     const [userInput, setUserInput] = useState('')
     const [newUsers, setNewUsers] = useState([username])
     const [chatName, setChatName] = useState('')
+    const [sumbitted, setSubmitted] = useState(false)
     const [chats, setChats] = useState([])
 
     useEffect(() => {
@@ -77,10 +79,15 @@ export function Home(){
                         </section>
                         
                         <label htmlFor="">Chat Name:</label>
-                        <input type="text" onChange={(e) => {setChatName(e.target.value)}}/>
+                        <input type="text" onChange={(e) => {setChatName(e.target.value);setSubmitted(false)}}/>
                         <button onClick={() => {
+                            if (chatName.length < 1){
+                                setSubmitted(true)
+                                return
+                            }
                             axiosInstance.post('/chat/new', {headers: { Authorization:token}, members: newUsers, name: chatName})
                         }}>Create Chat</button>
+                        <ErrorText state={(sumbitted && chatName.length < 1)} text='Missing Chat Name'/>
                     </section>
                 }
 

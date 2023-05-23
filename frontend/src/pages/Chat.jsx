@@ -48,6 +48,9 @@ export function Chat(){
                 <label htmlFor="">Message: </label>
                 <input type="text" onChange={(e) => {setMessage(e.target.value)}}/>
                 <button onClick={() => {
+                    if (message.length < 1){
+                        return
+                    }
                     axiosInstance.post(`/chat/${chatId}`, {message: message}, {headers: { Authorization:token}})
                 }}>Send</button>
             </section>
