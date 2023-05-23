@@ -13,7 +13,7 @@ def main(token, username):
     
     while True:
         print('Logged In as {}\n'.format(username))
-        res = requests.get('{host}/user/chats'.format(host=host), json={'token': token})
+        res = requests.post('{host}/user/chats'.format(host=host), json={'token': token})
         chats = json.loads(res.text)['chats']
         if len(chats) > 0:
             for i,chat  in enumerate(chats):
@@ -55,7 +55,7 @@ def useChat(chat, username):
             os.system('cls')
             break
 
-        res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'token': token, 'message': message})
+        res = requests.post('{host}/chat/{chatId}'.format(host=host, chatId=chat['id']), json={'message': message}, headers={'Authorization': token})
 
     changeState(0)
 

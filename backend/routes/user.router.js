@@ -12,7 +12,10 @@ SALT_LENGTH = parseInt(SALT_LENGTH)
 
 userRouter.get('/all', async (req,res) => {
     try {
-        const users = await User.findAll()
+        const users = (await User.findAll()).map((user) => {
+            console.log(user.username)
+            return user.username
+        })
         res.status(200).send(users)
     } catch (error) {
         console.log(error)
@@ -108,7 +111,7 @@ userRouter.post('/login', async (req,res) => {
 })
 
 
-userRouter.get('/chats', async (req,res) => {
+userRouter.post('/chats', async (req,res) => {
     try {
         const {token} = req.body
         if (token){
@@ -128,6 +131,7 @@ userRouter.get('/chats', async (req,res) => {
         res.sendStatus(500)
     }
 })
+
 
 
 
