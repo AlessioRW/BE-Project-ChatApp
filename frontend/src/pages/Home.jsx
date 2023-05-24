@@ -7,7 +7,7 @@ import { ErrorText } from "../components/ErrorText";
 
 export function Home(){
     const nav = useNavigate()
-    const {token, setToken, username, setUsername, openChat, setOpenChat } = useContext(userContext)
+    const {token, setToken, username, setUsername } = useContext(userContext)
     const { user, isAuthenticated, isLoading} = useAuth0();
     const [creatingChat, setCreatingChat] = useState(false)
     const [userInput, setUserInput] = useState('')
@@ -23,21 +23,19 @@ export function Home(){
     }, [isAuthenticated])
 
     useEffect(() => {
-        if (token){
-            axiosInstance.post('/user/chats', {token: token}).then((res) => {setChats(res.data.chats)})
+        if (token !== 'NONE'){
+            console.log(token)
+            axiosInstance.post('/user/chats', {token: token}).then((res) => {setChats(res.data.chats)}).catch((e) => {})
         }
     }, [token])
 
     useEffect(() => {
-        if (openChat === true){
-            setOpenChat(false)
-        }
     }, [])
 
     return (
         <section className="page-home">
             <h1>Chat App</h1>
-            {token && 
+            {token !== 'NONE' && 
             <section className='chat-container'>
                 {
                 chats.length > 0 ? 
@@ -96,9 +94,11 @@ export function Home(){
             </section>
             }
 
-            {token ?
+            {token !== 'NONE' ?
             <section>
-                <h2 onClick={() => {nav('/logout')}}>Logged in as {username}, Click to Log Out</h2>
+                <h2 onClick={() => {
+                    nav('/logout')
+                    }}>Logged in as {username}, Click to Log Out</h2>
             </section>
             
             :

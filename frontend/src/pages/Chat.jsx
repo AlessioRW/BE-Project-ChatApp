@@ -13,8 +13,10 @@ export function Chat(){
     const nav = useNavigate()
     const chatId = window.location.pathname.split('/').reverse()[0]
     useEffect(() => {
-        axiosInstance.get(`/chat/${chatId}`,  {headers: { Authorization:token}})
+        if (token !== 'NONE'){
+            axiosInstance.get(`/chat/${chatId}`,  {headers: { Authorization:token}})
             .then((res) => {setDetails(res.data)})
+        }
     }, [])
 
     useEffect(() => {
@@ -24,7 +26,6 @@ export function Chat(){
                 axiosInstance.get(`/chat/${chatId}/${0}/${50}`, {headers: { Authorization:token}})
                 .then((res) => {setMessages(res.data.messages)})
             }, 500)
-            console.log(intervalRef.id)
         }
     }, [chatDetails])
 
@@ -55,7 +56,7 @@ export function Chat(){
                 }}>Send</button>
             </section>
             }
-            <button onClick={() => {console.log(intervalRef.id);clearInterval(intervalRef.id);nav('/')}}>Home</button>
+            <button onClick={() => {clearInterval(intervalRef.id);nav('/')}}>Home</button>
         </section>
     )
 }
