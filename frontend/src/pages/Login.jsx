@@ -65,6 +65,7 @@ export function Login(){
                                     return
                                 }
                                 setToken(res.data)
+                                window.localStorage.setItem('token', res.data)
                             }).then(setUsername(usernameInput))
                             .then(() => {nav('/')})
                             .catch((error) => {
@@ -78,6 +79,7 @@ export function Login(){
                                 return
                             }
                             setToken(res.data)
+                            window.localStorage.setItem('token', res.data)
                         }).then(setUsername(usernameInput))
                         .then(() => {nav('/')})
                         .catch((error) => {
