@@ -109,7 +109,7 @@ describe('Creating Chats', () => {
             expect(res.statusCode).toEqual(200)
     })
 
-    it('new chat: user does not exit', async () => {
+    it('user does not exit', async () => {
         const res = await request(app)
             .post('/chat/new')
             .send({
@@ -119,5 +119,53 @@ describe('Creating Chats', () => {
             })
             expect(res.statusCode).toEqual(400)
             expect(JSON.parse(res.text).message).toBe('User not_real does not exist')
+    })
+})
+
+describe('messaging', () => {
+    let token;
+    it('logging in and setting token', async () => {
+        const res = await request(app)
+            .post('/user/login')
+            .send({
+                username: 'test_user',
+                password: 'password123'
+        })
+        expect(res.statusCode).toEqual(200)
+        token = res.text
+    })
+
+    it('sending a message to chat', async () => {
+        const res = await request(app)
+            .post('/chat/1')
+            .send({
+                headers:{Authorization: token},
+                message: 'test message'
+            })
+            expect(res.statusCode).toEqual(200)
+    })
+
+    it('retriving messages', async () => {
+
+        const messages = ['message 1','message 2','message 3','message 4','message 5']
+        for (let message of messages){
+            await request(app)
+                .post('/chat/1')
+                .send({
+                    headers:{Authorization: token},
+                    message: message
+                })
+        }
+
+        const res = await request(app)
+            .get('/chat/1/0/6') //try get 6 when there are only 5
+                .send({
+                    headers:{Authorization: token},
+                })
+            const messageRes = JSON.parse(res.text).messages
+            for (let i = 1; i < messageRes.length; i++){ //skip message from previous test
+                expect(messageRes[i].content).toEqual(messages[i-1])
+            }
+            expect(res.statusCode).toEqual(200)
     })
 })
