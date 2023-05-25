@@ -4,16 +4,20 @@ const jwt = require('jsonwebtoken')
 const userRouter = require('express')()
 const {User} = require('../db/models')
 let {JWT_SECRET, 
-    SALT_LENGTH, 
+    SALT_LENGTH,
+    NODE_ENV, 
 } = process.env
 SALT_LENGTH = parseInt(SALT_LENGTH)
 
+if (NODE_ENV === 'test'){
+    JWT_SECRET = 'test'
+    SALT_LENGTH = 5
+}
 
 
 userRouter.get('/all', async (req,res) => {
     try {
         const users = (await User.findAll()).map((user) => {
-            console.log(user.username)
             return user.username
         })
         res.status(200).send(users)

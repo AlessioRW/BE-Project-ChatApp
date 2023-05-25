@@ -17,7 +17,6 @@ async function seed() {
     await User.sync({
         force: true
     })
-
 }
 
 seed()

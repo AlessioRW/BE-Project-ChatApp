@@ -21,3 +21,5 @@ app.get('/', async (req,res) => {
 app.listen(port, async () => {
     console.log(`Server Running on  localhost:${port}`)
 })
+
+module.exports = app

@@ -2,10 +2,15 @@ require('dotenv').config()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-
 const chatRouter = require('express')()
 const { User, Message, Chat } = require('../db/models')
-let { JWT_SECRET } = process.env
+
+let { JWT_SECRET, NODE_ENV } = process.env
+if (NODE_ENV === 'test'){
+    JWT_SECRET = 'test'
+    SALT_LENGTH = 5
+}
+
 
 chatRouter.use(async (req, res, next) => {
     try {
@@ -25,9 +30,9 @@ chatRouter.use(async (req, res, next) => {
     }
 })
 
+//create new chat
 chatRouter.post('/new', async (req, res) => {
     try {
-        console.log(2)
         const { members, name, requesterId } = req.body
         const newChat = await Chat.create({
             name: name,
@@ -119,6 +124,7 @@ chatRouter.get('/:chatId', async (req, res) => {
     }
 })
 
+//deleted message from chat
 chatRouter.delete('/:messageId', async (req,res) => {
     try {
         const {requesterId} = req.body

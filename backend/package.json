@@ -12,7 +12,8 @@
     "sqlite3": "^5.1.6"
   },
   "scripts": {
-    "dev": "npx nodemon server.js",
+    "dev": "cross-env NODE_ENV=production && npx nodemon server.js",
     "seed": "node db/seed.js"
   }
+  
 }
