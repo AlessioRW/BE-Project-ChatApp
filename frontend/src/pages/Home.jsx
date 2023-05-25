@@ -4,6 +4,8 @@ import { userContext } from "../App"
 import { useAuth0 } from "@auth0/auth0-react";
 import { axiosInstance } from '../utils/axiosInstance'
 import { ErrorText } from "../components/ErrorText";
+import '../style/pages/home.scss'
+import { Sidebar } from "../components/Sidebar";
 
 export function Home(){
     const nav = useNavigate()
@@ -34,7 +36,10 @@ export function Home(){
 
     return (
         <section className="page-home">
-            <h1>Chat App</h1>
+
+            <Sidebar username={username} nav={nav} token={token}/>
+
+            
             {token !== 'NONE' && 
             <section className='chat-container'>
                 {
@@ -44,7 +49,7 @@ export function Home(){
                     {chats.map((chat) => {
                         return (
                             <section className='chat-item'>
-                                <button onClick={() => {nav(`/chat/${chat.id}`)}}>{chat.name}</button>
+                                <button className='chat-btn' onClick={() => {nav(`/chat/${chat.id}`)}}>{chat.name}</button>
                             </section>
                         )
                     })}
@@ -94,16 +99,6 @@ export function Home(){
             </section>
             }
 
-            {token !== 'NONE' ?
-            <section>
-                <h2 onClick={() => {
-                    nav('/logout')
-                    }}>Logged in as {username}, Click to Log Out</h2>
-            </section>
-            
-            :
-            <h2 onClick={() => {nav('/login')}}>Go to login</h2>
-            }
             
         </section>
     )

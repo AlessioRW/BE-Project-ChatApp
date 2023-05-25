@@ -3,12 +3,14 @@ import { axiosInstance } from "../utils/axiosInstance"
 import { useContext } from "react"
 import { userContext } from "../App"
 import { useNavigate } from "react-router"
+import { Sidebar } from "../components/Sidebar"
+import '../style/pages/chat.scss'
 
 export function Chat(){
     const [chatDetails, setDetails] = useState({})
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState()
-    const {token, setOpenChat, openChat} = useContext(userContext)
+    const {token, setOpenChat, openChat, username} = useContext(userContext)
     const intervalRef = useRef()
     const nav = useNavigate()
     const chatId = window.location.pathname.split('/').reverse()[0]
@@ -31,6 +33,8 @@ export function Chat(){
 
     return (
         <section className="page-chat">
+
+            <Sidebar token={token} nav={nav} username={username} inChat={true} intervalRef={intervalRef}/>
             {chatDetails !== {} && 
             <section className="chat">
                 <h2 className="chat-name">Chat: {chatDetails.name}</h2>
@@ -56,7 +60,7 @@ export function Chat(){
                 }}>Send</button>
             </section>
             }
-            <button onClick={() => {clearInterval(intervalRef.id);nav('/')}}>Home</button>
+            
         </section>
     )
 }

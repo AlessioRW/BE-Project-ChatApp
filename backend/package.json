@@ -9,11 +9,11 @@
     "nodemon": "^2.0.22",
     "react-router": "^6.11.1",
     "sequelize": "^6.31.1",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "yarn": "^1.22.19"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=production && npx nodemon server.js",
+    "dev": "cross-env NODE_ENV=production npx nodemon server.js",
     "seed": "node db/seed.js"
   }
-  
 }
